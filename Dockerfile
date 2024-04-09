@@ -4,7 +4,6 @@ ENV IAM_SERVICE_URL="https://iam.forge-code.com"
 
 WORKDIR /code
 
-
 RUN python -m venv venv
 ENV PATH="/code/venv/bin:$PATH"
 ENV UPLOADS_DIR="/code/uploads"
