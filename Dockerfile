@@ -2,8 +2,12 @@ FROM python:3.10.2
 
 ENV DATABASE_URL="postgresql://postgres:123qwe123qwe@35.238.209.92/postgres"
 ENV IAM_SERVICE_URL="https://iam.forge-code.com"
-ENV FILE_SERVICE_URL = "https://file.forge-code.com"
+ENV FILE_SERVICE_URL="https://file.forge-code.com"
 ENV UPLOADS_DIR="/uploads"
+# ENV DATABASE_URL="postgresql://postgres:123qwe123qwe@35.238.209.92/postgres"
+# ENV IAM_SERVICE_URL="http://localhost:8001"
+# ENV FILE_SERVICE_URL="http://localhost:8004"
+# ENV UPLOADS_DIR="/uploads"
 
 WORKDIR /code
 
