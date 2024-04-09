@@ -17,6 +17,7 @@ async def uploadImage(
     image:UploadFile,
     current_user: models.User = Depends(auth_required)
 ):
+    uploads_dir = os.getenv("UPLOADS_DIR", "uploads")
     allowed_extensions = {'jpg','jpeg','png'}
     extension = image.filename.split('.')[-1].lower()
     if extension not in allowed_extensions:
@@ -24,7 +25,8 @@ async def uploadImage(
     content = await image.read()
     
     filename = generate_unique_filename(image.filename)
-    with open(f'uploads/thumbnails/{filename}','wb') as f:
+    file_path = os.path.join(uploads_dir,"images", filename)
+    with open(file_path,'wb') as f:
         f.write(content)
         
     return {"access_url":f'{os.getenv("FILE_SERVICE_URL")}/thumbnails/{filename}'}
