@@ -17,7 +17,8 @@ async def uploadImage(
     image:UploadFile,
     current_user: models.User = Depends(auth_required)
 ):
-    uploads_dir = os.getenv("UPLOADS_DIR", "uploads")
+    uploads_dir = "/uploads"
+
     allowed_extensions = {'jpg','jpeg','png'}
     extension = image.filename.split('.')[-1].lower()
     if extension not in allowed_extensions:
@@ -25,7 +26,7 @@ async def uploadImage(
     content = await image.read()
     
     filename = generate_unique_filename(image.filename)
-    file_path = os.path.join(uploads_dir,"images", filename)
+    file_path = os.path.join(uploads_dir,"thumbnails", filename)
     with open(file_path,'wb') as f:
         f.write(content)
         
@@ -33,7 +34,7 @@ async def uploadImage(
     
 @router.get("/{filename}")
 async def getThumbnail(filename: str):
-    image_path = os.path.join('uploads/thumbnails', filename)
+    image_path = os.path.join('/uploads/thumbnails', filename)
     if not os.path.isfile(image_path):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Image not found")
     

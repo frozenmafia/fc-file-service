@@ -12,28 +12,27 @@ router = APIRouter(
 
 @router.post("/upload")
 async def uploadImage(
-    image:UploadFile,
+    image: UploadFile,
     current_user: models = Depends(auth_required),
 ):
-    uploads_dir = os.getenv("UPLOADS_DIR", "uploads")
+    uploads_dir = "/uploads"
 
-    allowed_extensions = {'jpg','jpeg','png'}
+    allowed_extensions = {'jpg', 'jpeg', 'png'}
     extension = image.filename.split('.')[-1].lower()
     if extension not in allowed_extensions:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Only accepts JPEG, JPG and PNG")
     content = await image.read()
     
     filename = generate_unique_filename(image.filename)
-    file_path = os.path.join(uploads_dir,"images", filename)
-    with open(file_path,'wb') as f:
+    file_path = os.path.join(uploads_dir, "images", filename)
+    with open(file_path, 'wb') as f:
         f.write(content)
         
-    return {"access_url":f'{os.getenv("FILE_SERVICE_URL")}/images/{filename}'}
-    
+    return {"access_url": f'{os.getenv("FILE_SERVICE_URL")}/images/{filename}'}
     
 @router.get("/{filename:path}")  # Use path parameter for flexibility
 async def get_image(filename: str):
-    image_path = os.path.join('uploads/images', filename)
+    image_path = os.path.join('/uploads/images', filename)  # Use absolute path
 
     if not os.path.isfile(image_path):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Image not found")
